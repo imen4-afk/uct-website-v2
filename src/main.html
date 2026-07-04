@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCT 2.0 — Unmasking Cyber Threats</title>
+  <meta name="description" content="Unmasking Cyber Threats (UCT) 2.0 — a national cybersecurity congress by IEEE CS Chapter ISIMA. Overnight CTF, technical challenge, round table & workshops. 26–27 September 2025, Mahdia, Tunisia." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="#" class="nav-logo" data-panel="home">UCT<span>·</span>2.0</a>
+    <ul class="nav-links" id="navLinks">
+      <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+      <li><a data-panel="about">About</a></li>
+      <li><a data-panel="program">Program</a></li>
+      <li><a data-panel="ctf">CTF</a></li>
+      <li><a data-panel="training">Training</a></li>
+      <li><a data-panel="speakers">Speakers</a></li>
+      <li><a data-panel="partners">Partners</a></li>
+      <li><a data-panel="ambassadors">Ambassadors</a></li>
+      <li><a data-panel="venue">Venue</a></li>
+      <li><a data-panel="contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;gap:.7rem;align-items:center;">
+      <button class="theme-toggle" id="themeToggle">[ DARK ]</button>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a data-panel="about">About</a>
+    <a data-panel="program">Program</a>
+    <a data-panel="ctf">CTF</a>
+    <a data-panel="training">Training</a>
+    <a data-panel="speakers">Speakers</a>
+    <a data-panel="partners">Partners</a>
+    <a data-panel="ambassadors">Ambassadors</a>
+    <a data-panel="networking">Networking</a>
+    <a data-panel="venue">Venue</a>
+    <a data-panel="contact">Contact</a>
+  </div>
+
+  <div class="panel-container">
+
+    <div id="panel-home" class="panel active">
+      <div class="hero-wrapper">
+        <div class="hero-clouds"></div>
+        <div class="hero-glow"></div>
+
+        <img src="../assets/beb.png" class="hero-decor hero-arch" alt="" aria-hidden="true">
+        <div class="hero-decor hero-fortress-group">
+          <img src="../assets/skifa.png" class="skifa" alt="" aria-hidden="true">
+          <img src="../assets/pinguin.png" class="penguin" alt="" aria-hidden="true">
+        </div>
+
+        <div class="hero-content">
+          <svg class="hero-bird" viewBox="0 0 64 24" width="42" height="16" aria-hidden="true">
+            <path d="M2 18 Q16 2 32 12 Q48 2 62 18" stroke="#b3873c" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <p class="hero-eyebrow">2nd Edition — National Cybersecurity Congress</p>
+          <h1 class="hero-title">
+            <span class="accent">Unmasking</span><br>
+            Cyber<span class="accent-red"> Threats</span>
+          </h1>
+          <div class="hero-rule">
+            <span class="hero-rule-line"></span>
+            <span class="hero-rule-dot">✦</span>
+            <span class="hero-rule-line"></span>
+          </div>
+          <p class="hero-subtitle">IEEE CS Chapter · ISIMA Student Branch</p>
+          <p class="hero-organizer">26 — 27 September 2025 · Mahdia, Tunisia</p>
+
+          <p class="hero-note">❖ Registration is not open yet — follow along for the launch date</p>
+
+          <div class="countdown" id="countdown">
+            <div class="countdown-item">
+              <div class="countdown-num" id="cd-days">00</div>
+              <div class="countdown-label">DAYS</div>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-item">
+              <div class="countdown-num" id="cd-hours">00</div>
+              <div class="countdown-label">HOURS</div>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-item">
+              <div class="countdown-num" id="cd-mins">00</div>
+              <div class="countdown-label">MINS</div>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-item">
+              <div class="countdown-num" id="cd-secs">00</div>
+              <div class="countdown-label">SECS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scroll-cue" aria-hidden="true">
+          <span>Scroll</span>
+          <span class="line"></span>
+        </div>
+
+        <div class="hero-waves">
+          <img src="../assets/waves.png" class="wave-img" alt="">
+          <div class="boat-wrap boat-a"><img src="../assets/boat.png" alt=""></div>
+          <div class="boat-wrap boat-b"><img src="../ssets/boat.png" alt=""></div>
+          <div class="boat-wrap boat-c"><img src="../assets/boat.png" alt=""></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-about" class="panel">
+      <div class="section-inner">
+        <div class="about-grid">
+          <div>
+            <p class="eyebrow">// about uct</p>
+            <h2 class="section-title">The Congress</h2>
+            <div class="divider"></div>
+            <p class="section-lead">
+              Unmasking Cyber Threats (UCT) is a national cybersecurity congress organized by the
+              IEEE Computer Science Chapter at ISIMA. Now in its second edition, UCT gathers students,
+              professionals, and industry experts for two days of deep technical content, competitions,
+              and high-value networking.
+            </p>
+            <p class="section-lead" style="margin-top:1rem;">
+              The event runs a parallel CTF competition and technical challenge alongside a curated
+              round table bringing prominent domain experts — a rare opportunity to learn, compete,
+              and build your network in one place.
+            </p>
+            <div class="about-tags">
+              <span class="tag">Cybersecurity</span>
+              <span class="tag">CTF</span>
+              <span class="tag">Round Table</span>
+              <span class="tag">Technical Challenges</span>
+              <span class="tag">Networking</span>
+              <span class="tag">IEEE</span>
+              <span class="tag">ISIMA</span>
+            </div>
+          </div>
+          <div class="about-visual">
+            <div class="terminal-line"><span class="prompt">§</span><span class="key">Event</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val">Unmasking Cyber Threats — 2nd Ed.</span></div>
+            <div class="terminal-line" style="margin-top:.5rem;"><span class="prompt">§</span><span class="key">Organizer</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val">IEEE CS Chapter · ISIMA SB</span></div>
+            <div class="terminal-line" style="margin-top:.5rem;"><span class="prompt">§</span><span class="key">Date</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val">26 – 27 September 2025</span></div>
+            <div class="terminal-line" style="margin-top:.5rem;"><span class="prompt">§</span><span class="key">Location</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val">Mahdia, Tunisia</span></div>
+            <div class="terminal-line" style="margin-top:.5rem;"><span class="prompt">§</span><span class="key">Highlights</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val">CTF · Tech Challenge · Round Table</span></div>
+            <div class="terminal-line" style="margin-top:.5rem;"><span class="prompt">§</span><span class="key">Status</span></div>
+            <div class="terminal-line"><span class="prompt">—</span><span class="val" style="color:var(--gold);">REGISTRATION COMING SOON</span><span class="terminal-cursor"></span></div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-program" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// schedule</p>
+        <h2 class="section-title">Program</h2>
+        <div class="divider"></div>
+        <p class="section-lead" style="margin-bottom:2rem;">
+          Two packed days combining technical sessions, competitions, expert talks, and an overnight CTF.
+        </p>
+
+        <div class="day-tabs">
+          <button class="day-tab active" data-day="1">Day 1</button>
+          <button class="day-tab" data-day="2">Day 2</button>
+        </div>
+
+        <div class="schedule-block active" id="day1">
+          <div class="schedule-item">
+            <span class="schedule-time">12:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Check In</div>
+              <div class="schedule-detail">Badge pickup & welcome</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">13:30</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Opening Ceremony</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">15:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-tech">TALK</span>Conference</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">16:30</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Break</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">17:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-tech">TECH</span>Workshops</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">19:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Dinner</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">20:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-social">PARTY</span>Party</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">22:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-night">OVERNIGHT</span>CTF Start + Karaoke</div>
+              <div class="schedule-detail">Overnight CTF begins, alongside karaoke & side activities for visitors</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">23:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-night">NIGHT</span>Movie</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-block" id="day2">
+          <div class="schedule-item">
+            <span class="schedule-time">09:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-ctf">CTF</span>End of CTF</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">09:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Breakfast</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">09:30</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-social">TOUR</span>Tour Mahdia</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">09:30</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-social">GAME</span>Murder Game</div>
+              <div class="schedule-detail">Parallel option alongside the Mahdia tour</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">12:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Lunch</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">13:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-tech">CHALLENGE</span>Pitching T.C</div>
+              <div class="schedule-detail">Technical Challenge teams pitch to the jury</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">15:00</span>
+            <div class="schedule-content">
+              <div class="schedule-event">Break</div>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="schedule-time">15:30</span>
+            <div class="schedule-content">
+              <div class="schedule-event"><span class="schedule-badge badge-social">CLOSING</span>Closing Ceremony</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-ctf" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// competition</p>
+        <h2 class="section-title">CTF & Tech Challenge</h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          An overnight Capture The Flag competition running in parallel with a Technical Challenge.
+          Test your skills across multiple categories — from beginner to expert level.
+        </p>
+        <div class="ctf-grid">
+          <div class="ctf-card">
+            <div class="ctf-icon">🌐</div>
+            <div class="ctf-name">Web Exploitation</div>
+            <div class="ctf-desc">SQLi, XSS, SSRF, authentication bypasses, and more. Break web apps like a pro.</div>
+          </div>
+          <div class="ctf-card">
+            <div class="ctf-icon">🔬</div>
+            <div class="ctf-name">Reverse Engineering</div>
+            <div class="ctf-desc">Disassemble binaries, crack obfuscated code, and uncover hidden logic.</div>
+          </div>
+          <div class="ctf-card">
+            <div class="ctf-icon">🔐</div>
+            <div class="ctf-name">Cryptography</div>
+            <div class="ctf-desc">Classic ciphers, modern crypto vulnerabilities, and mathematical puzzles.</div>
+          </div>
+          <div class="ctf-card">
+            <div class="ctf-icon">🕵️</div>
+            <div class="ctf-name">OSINT</div>
+            <div class="ctf-desc">Open-source intelligence gathering. Find what's hiding in plain sight.</div>
+          </div>
+          <div class="ctf-card">
+            <div class="ctf-icon">🧬</div>
+            <div class="ctf-name">Forensics</div>
+            <div class="ctf-desc">Memory dumps, packet captures, steganography, and file carving.</div>
+          </div>
+          <div class="ctf-card">
+            <div class="ctf-icon">💡</div>
+            <div class="ctf-name">Technical Challenge</div>
+            <div class="ctf-desc">A separate challenge track testing applied knowledge in real-world scenarios with jury evaluation.</div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-training" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// pre-event workshops</p>
+        <h2 class="section-title">Training Program</h2>
+        <div class="divider"></div>
+        <div class="training-banner">
+          <span class="icon">📡</span>
+          <p>
+            Ahead of UCT 2.0, we're running a <strong>full workshop series on Cybersecurity Basics & CTF Methodology</strong>,
+            every few days from July through September. Open to all students across Tunisian universities.
+          </p>
+        </div>
+        <div class="training-timeline">
+          <div class="tl-item">
+            <div class="tl-dot">01</div>
+            <div class="tl-content">
+              <h4>Introduction to Cybersecurity</h4>
+              <p>July 25</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">02</div>
+            <div class="tl-content">
+              <h4>CTF Fundamentals</h4>
+              <p>July 28</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">03</div>
+            <div class="tl-content">
+              <h4>Networking Basics for Hackers</h4>
+              <p>August 1</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">04</div>
+            <div class="tl-content">
+              <h4>Web Fundamentals</h4>
+              <p>August 4</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">05</div>
+            <div class="tl-content">
+              <h4>Web Exploitation Basics</h4>
+              <p>August 8</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">06</div>
+            <div class="tl-content">
+              <h4>Common Web Vulnerabilities</h4>
+              <p>August 11</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">07</div>
+            <div class="tl-content">
+              <h4>Burp Suite & Web Enumeration</h4>
+              <p>August 15</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">08</div>
+            <div class="tl-content">
+              <h4>OSINT & Metadata Analysis</h4>
+              <p>August 18</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">09</div>
+            <div class="tl-content">
+              <h4>Digital Forensics</h4>
+              <p>August 22</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">10</div>
+            <div class="tl-content">
+              <h4>Cryptography Basics</h4>
+              <p>August 25</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">11</div>
+            <div class="tl-content">
+              <h4>Reverse Engineering Basics</h4>
+              <p>August 29</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">12</div>
+            <div class="tl-content">
+              <h4>Binary Exploitation Introduction</h4>
+              <p>September 1</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">13</div>
+            <div class="tl-content">
+              <h4>Steganography & File Analysis</h4>
+              <p>September 5</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">14</div>
+            <div class="tl-content">
+              <h4>Scripting for CTFs (Python & Automation)</h4>
+              <p>September 8</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-speakers" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// who's speaking</p>
+        <h2 class="section-title">Speakers & Guests</h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          The speaker lineup is being finalized — industry experts and guests will be announced here soon.
+        </p>
+        <div class="speakers-grid">
+          <div class="speaker-card">
+            <div class="speaker-avatar">👤</div>
+            <div class="speaker-name">To Be Announced</div>
+            <div class="speaker-role">Speaker</div>
+          </div>
+          <div class="speaker-card">
+            <div class="speaker-avatar">👤</div>
+            <div class="speaker-name">To Be Announced</div>
+            <div class="speaker-role">Speaker</div>
+          </div>
+          <div class="speaker-card">
+            <div class="speaker-avatar">👤</div>
+            <div class="speaker-name">To Be Announced</div>
+            <div class="speaker-role">Guest</div>
+          </div>
+          <div class="speaker-card">
+            <div class="speaker-avatar">👤</div>
+            <div class="speaker-name">To Be Announced</div>
+            <div class="speaker-role">Round Table</div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-partners" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// backed by</p>
+        <h2 class="section-title">Partners</h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          Our partner lineup for UCT 2.0 is being finalized. Interested in supporting Tunisia's cybersecurity congress?
+        </p>
+        <div class="partners-grid">
+          <div class="partner-slot">Your Logo</div>
+          <div class="partner-slot">Your Logo</div>
+          <div class="partner-slot">Your Logo</div>
+          <div class="partner-slot">Your Logo</div>
+          <div class="partner-slot">Your Logo</div>
+          <div class="partner-slot">Your Logo</div>
+        </div>
+        <div class="partners-cta">
+          <a href="mailto:ieee.cs.isima@gmail.com" class="btn-outline">Become a Partner</a>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-ambassadors" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// represent uct</p>
+        <h2 class="section-title">Ambassadors</h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          Our ambassador network is forming across Tunisian universities — meet the team soon, or become one yourself.
+        </p>
+        <div class="ambassadors-grid">
+          <div class="ambassador-card">
+            <div class="ambassador-avatar">👤</div>
+            <div class="ambassador-name">To Be Announced</div>
+            <div class="ambassador-school">University</div>
+          </div>
+          <div class="ambassador-card">
+            <div class="ambassador-avatar">👤</div>
+            <div class="ambassador-name">To Be Announced</div>
+            <div class="ambassador-school">University</div>
+          </div>
+          <div class="ambassador-card">
+            <div class="ambassador-avatar">👤</div>
+            <div class="ambassador-name">To Be Announced</div>
+            <div class="ambassador-school">University</div>
+          </div>
+          <a class="ambassador-card ambassador-apply" href="mailto:ieee.cs.isima@gmail.com">
+            <div class="ambassador-avatar">+</div>
+            <div class="ambassador-name">Become an Ambassador</div>
+            <div class="ambassador-school">Apply now</div>
+          </a>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-networking" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// why attend</p>
+        <h2 class="section-title">More Than a Congress</h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          UCT is designed to be the intersection of technical depth and real career opportunity.
+        </p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-num">// 01</div>
+            <div class="feature-title">Expert Speakers</div>
+            <div class="feature-desc">Prominent figures from Tunisia's cybersecurity scene. Real practitioners sharing real insights.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-num">// 02</div>
+            <div class="feature-title">Round Table</div>
+            <div class="feature-desc">A curated panel discussion on the cyber landscape — careers, threats, and the industry's direction.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-num">// 03</div>
+            <div class="feature-title">Networking</div>
+            <div class="feature-desc">Connect with professionals, recruiters, and peers across Tunisian universities and companies.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-num">// 04</div>
+            <div class="feature-title">Competitions</div>
+            <div class="feature-desc">Prove your skills and win prizes in the CTF and Technical Challenge competitions.</div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-venue" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// location</p>
+        <h2 class="section-title">Venue</h2>
+        <div class="divider"></div>
+        <div class="venue-grid">
+          <div class="venue-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51885.09873282394!2d11.013!3d35.504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1302360abcfc9f01%3A0x7f9e2c2ad8dc2a79!2sMahdia%2C%20Tunisia!5e0!3m2!1sen!2stn!4v1700000000000"
+              allowfullscreen="" loading="lazy" title="Map of Mahdia, Tunisia">
+            </iframe>
+          </div>
+          <div class="venue-info">
+            <h3>Mahdia, Tunisia</h3>
+            <div class="venue-detail">
+              <span class="icon">📍</span>
+              <p><strong>Mahdia</strong> — Coastal city on the central-eastern coast of Tunisia, known for its historic medina and vibrant atmosphere.</p>
+            </div>
+            <div class="venue-detail">
+              <span class="icon">📅</span>
+              <p><strong>26 – 27 September 2025</strong><br>Two-day congress with overnight CTF</p>
+            </div>
+            <div class="venue-detail">
+              <span class="icon">🏛️</span>
+              <p><strong>Venue TBA</strong> — Full address and access details will be announced to registered participants.</p>
+            </div>
+            <div class="venue-detail">
+              <span class="icon">🌙</span>
+              <p><strong>Overnight accommodation</strong> — Logistics for the overnight CTF component will be coordinated with participants.</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-faq" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// help</p>
+        <h2 class="section-title">FAQ</h2>
+        <div class="divider"></div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-q">
+              Who can attend UCT?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              UCT is open to all university students in Tunisia, regardless of major. You don't need to be a CS student — curiosity about cybersecurity is enough. IEEE membership is encouraged but not mandatory.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Is the CTF beginner-friendly?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              Yes. The CTF is designed with multiple difficulty levels, from introductory challenges accessible to beginners all the way to advanced flags for experienced players. The pre-event training program also prepares you to play.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              What's the overnight CTF like?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              The CTF runs from late Day 1 through the morning of Day 2. The venue stays open overnight with food, drinks, and power infrastructure provided. A safety and logistics checklist is prepared by the organizing team to ensure a comfortable experience.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              Do I need a team to participate in the CTF?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              Teams are recommended (2–4 people), but you can register solo and we'll help you find teammates. Team formation details will be shared after registration.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              How do I become an ambassador for UCT?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              UCT ambassadors represent the congress within their university or club, drive registrations, and stay connected with the organizing team. Contact us via email or social media and mention your school — we'll share the ambassador brief.
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">
+              What is the training program and when does it start?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-a">
+              After the congress, the IEEE CS Chapter ISIMA will launch a free cybersecurity & CTF training series running through the summer. Sessions cover networking, Linux, web security, crypto, and more. Open to all — follow our social media for announcements.
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-contact" class="panel">
+      <div class="section-inner">
+        <p class="eyebrow">// get involved</p>
+        <h2 class="section-title">Contact & Register</h2>
+        <div class="divider"></div>
+        <div class="contact-grid">
+          <div>
+            <p class="section-lead" style="margin-bottom:1.5rem;">
+              Questions? Want to be an ambassador? Interested in sponsoring UCT?
+              Reach out — we're happy to chat.
+            </p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:ieee.cs.isima@gmail.com">
+                <span class="icon">✉</span>
+                ieee.cs.isima@gmail.com
+              </a>
+              <a class="contact-link" href="https://www.instagram.com/ieee.uct" target="_blank">
+                <span class="icon">📸</span>
+                @ieee.uct
+              </a>
+              <a class="contact-link" href="#">
+                <span class="icon">💼</span>
+                IEEE CS Chapter · ISIMA Student Branch
+              </a>
+            </div>
+            <div class="social-row">
+              <a class="social-btn" href="https://www.instagram.com/ieee.uct" target="_blank">
+                <span>IG</span> instagram
+              </a>
+              <a class="social-btn" href="#">
+                <span>LI</span> linkedin
+              </a>
+              <a class="social-btn" href="#">
+                <span>FB</span> facebook
+              </a>
+            </div>
+          </div>
+          <div class="register-box">
+            <h3>Join UCT 2</h3>
+            <p>Registration isn't open yet. Follow along and we'll announce it here first.</p>
+            <p class="note">❖ Registration opens closer to the event — follow @ieee.uct for the announcement</p>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="footer-logo">UCT 2.0 · IEEE CS · ISIMA SB</span>
+          <span class="footer-copy">© 2025 IEEE CS Chapter ISIMA Student Branch. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+
+  </div><script src="script.js"></script>
+</body>
+</html>
