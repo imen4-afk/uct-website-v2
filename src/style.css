@@ -509,12 +509,15 @@ h1.hero-title {
 }
 .tw-cursor {
   display: inline-block;
-  width: 2px; height: 1em;
-  margin-left: 5px;
+  width: .6em; height: .78em;
+  margin-left: calc(2px - .18em);
   background: var(--gold);
-  vertical-align: text-bottom;
+  vertical-align: baseline;
+  position: relative;
+  top: .10.4em;
+  letter-spacing: normal;
   opacity: 0;
-  animation: tw-blink 1s step-end 5.2s infinite;
+  animation: tw-blink 2s step-end 5.2s infinite;
 }
 @keyframes reveal-type { to { clip-path: inset(0 0 0 0); } }
 @keyframes tw-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
