@@ -7,12 +7,12 @@
    ============================================================ */
 
 :root {
-  --gold: #c99a4a;
-  --gold-bright: #e3bb70;
-  --red: #d1604a;
-  --purple: #5b7fa6;
-  --sea-1: #3679ac;
-  --sea-2: #163f66;
+  --gold: #d2a549;
+  --gold-bright: #f0c96c;
+  --red: #d06a4f;
+  --purple: #6883b6;
+  --sea-1: #3d7fb5;
+  --sea-2: #1c4369;
   --mono: 'Inter', sans-serif;
   --display: 'Cinzel', serif;
   --body: 'EB Garamond', serif;
@@ -26,14 +26,14 @@
 /* Dark = default (cyber-ops night). Light = daylight medina mode. */
 :root,
 [data-theme="dark"] {
-  --bg: #0a1220;
-  --bg2: #0e1a2e;
-  --bg3: #142a42;
-  --surface: #101d33;
-  --surface-2: #15243c;
-  --border: rgba(201, 154, 74, .16);
-  --text: #ece3cf;
-  --text-dim: #8b9bb5;
+  --bg: #08121f;
+  --bg2: #0e1c33;
+  --bg3: #132946;
+  --surface: #101f37;
+  --surface-2: #162842;
+  --border: rgba(210, 165, 73, .18);
+  --text: #f0e9d8;
+  --text-dim: #9cb0c9;
   --text-ghost: rgba(236, 227, 207, .12);
   --shadow: rgba(0, 0, 0, .55);
   --card-shadow: 0 14px 44px -14px rgba(0, 0, 0, .55);
@@ -621,7 +621,7 @@ h2.section-title {
 h2.section-title.is-visible { background-size: 100% 100%; }
 @media (prefers-reduced-motion: reduce) { h2.section-title { background-size: 100% 100%; } }
 
-.section-lead { color: var(--text-dim); max-width: 620px; font-size: 1.05rem; line-height: 1.75; }
+.section-lead { color: #a0b0c6; max-width: 620px; font-size: 1.05rem; line-height: 1.8; }
 
 .divider {
   width: 0; height: 2px;
@@ -787,10 +787,41 @@ h2.section-title.is-visible { background-size: 100% 100%; }
   border: 1px dashed var(--border); display: flex; align-items: center; justify-content: center;
   color: var(--gold); background: var(--surface-2); transition: border-color .3s, transform .35s var(--spring);
 }
+.speaker-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: .9rem;
+  border: 1px solid rgba(210, 165, 73, .24);
+  background: var(--surface-2);
+}
 .speaker-avatar svg, .ambassador-avatar svg { width: 24px; height: 24px; }
 .speaker-card:hover .speaker-avatar, .ambassador-card:hover .ambassador-avatar { border-color: var(--hover); transform: scale(1.08); }
-.speaker-name, .ambassador-name { font-family: var(--display); font-weight: 700; font-size: .9rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
-.speaker-role, .ambassador-school { font-family: var(--mono); font-size: .63rem; letter-spacing: .15em; color: var(--gold); text-transform: uppercase; }
+.speaker-name, .ambassador-name { font-family: var(--display); font-weight: 700; font-size: .95rem; color: var(--gold); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .35rem; }
+.speaker-role, .ambassador-school { font-family: var(--mono); font-weight: 400; font-size: .68rem; letter-spacing: .18em; color: var(--text-dim); text-transform: uppercase; line-height: 1.5; }
+.ambassador-photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: .9rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.ambassador-card .ambassador-name { margin-bottom: .25rem; }
+.ambassador-card .ambassador-school { margin-top: .2rem; color: var(--gold); }
+.ambassador-email {
+  display: inline-block;
+  margin-top: .4rem;
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+  text-decoration: none;
+  word-break: break-word;
+}
+.ambassador-email:hover { color: var(--gold); }
 .ambassador-card.ambassador-apply { border-color: var(--gold); background: var(--surface-2); }
 .ambassador-card.ambassador-apply .ambassador-avatar { border: 1px solid var(--gold); color: var(--gold); }
 .ambassador-card.ambassador-apply .ambassador-name { color: var(--gold); }
