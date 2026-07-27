@@ -600,17 +600,17 @@ document.addEventListener('DOMContentLoaded', function() {
       {
         test: /day ?1|first day/,
         topic: 'program',
-        reply: "Day 1: Check In (12:00) → Opening Ceremony (13:30) → Conference (15:00) → Workshops (17:00) → Dinner (19:00) → Party (20:00) → overnight CTF start + karaoke (22:00) → Movie (23:00)."
+        reply: "Saturday 26 September: Welcome & badge pickup (12:00) → Opening ceremony (13:30) → Keynote conference (15:00) → Coffee break (16:30) → Technical workshops (17:00) → Dinner (19:00) → Evening event (20:00) → Overnight CTF begins (22:00, 12 hours)."
       },
       {
         test: /day ?2|second day|closing/,
         topic: 'program',
-        reply: "Day 2: End of CTF & breakfast (09:00) → Tour of Mahdia / Murder Game (09:30, pick one) → Lunch (12:00) → Technical Challenge pitching (13:00) → Break (15:00) → Closing Ceremony (15:30)."
+        reply: "Sunday 27 September: Breakfast (08:00) → End of CTF (10:00) → Pitching and stands of the Technical Challenge plus startup and SME exhibition space (10:30) → Lunch (12:30) → Round table (13:15) → Closing ceremony (14:45)."
       },
       {
         test: /program|schedule|agenda/,
         topic: 'program',
-        reply: "UCT 2.0 runs two packed days — technical talks, workshops, an overnight CTF, a party, a Mahdia tour, and the Technical Challenge pitch, closing with the awards ceremony. See the Program section for the full Day 1 / Day 2 breakdown."
+        reply: "UCT 2.0 runs two packed days of keynote talks, technical workshops, an overnight CTF, an evening event, Technical Challenge pitching, and a closing ceremony. See the Program section for the full Saturday / Sunday breakdown."
       },
       {
         test: /web exploitation|\bsqli\b|\bxss\b/,
