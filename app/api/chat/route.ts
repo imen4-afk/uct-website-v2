@@ -1,7 +1,6 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
 import path from "path";
 import { createClient } from "../../../utils/supabase/server";
 
@@ -39,28 +38,6 @@ If genuinely unsure, or neither the knowledge base nor the live website content 
 Never invent facts that aren't in the knowledge base or website content.
 `.trim();
 
-async function readWebsiteText() {
-  const candidates = [
-    path.join(process.cwd(), "public", "index.html"),
-    path.join(process.cwd(), "docs", "index.html"),
-  ];
-
-  for (const filePath of candidates) {
-    try {
-      const html = await readFile(filePath, "utf-8");
-      return html
-        .replace(/<[^>]*>/g, " ")
-        .replace(/\s+/g, " ")
-        .trim()
-        .slice(0, 6000);
-    } catch {
-      // try the next candidate
-    }
-  }
-
-  return null;
-}
-
 export async function POST(req: Request) {
   console.log('[Touhemi] Function started');
 
@@ -78,10 +55,6 @@ export async function POST(req: Request) {
   }
 
   console.log('[Touhemi] API key present:', !!process.env.OPENROUTER_API_KEY);
-
-  console.log('[Touhemi] Reading website...');
-  const websiteText = await readWebsiteText().catch(() => null);
-  console.log('[Touhemi] Website read done, got text:', !!websiteText);
 
   let supabase: any = null;
   try { supabase = await createClient(); } catch {}
@@ -120,11 +93,7 @@ export async function POST(req: Request) {
       ? kbRows.map((row) => `--- ${row.title} ---\n${row.content}`).join("\n\n")
       : "(knowledge base unavailable — only use the FALLBACK contact info)";
 
-  const liveContentSection = websiteText
-    ? `\n\n== LIVE WEBSITE CONTENT ==\n\n${websiteText}`
-    : "";
-
-  const SYSTEM_PROMPT = `${PERSONA_PROMPT}\n\n== UCT 2.0 KNOWLEDGE BASE ==\n\n${knowledgeText}${liveContentSection}\n\n${BEHAVIOR_RULES}`;
+  const SYSTEM_PROMPT = `${PERSONA_PROMPT}\n\n== UCT 2.0 KNOWLEDGE BASE ==\n\n${knowledgeText}\n\n${BEHAVIOR_RULES}`;
 
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
