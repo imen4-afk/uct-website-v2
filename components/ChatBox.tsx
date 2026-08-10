@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "../utils/supabase/client";
 
 type Message = { user: string; text: string };
 type HistoryTurn = { role: string; content: string };
