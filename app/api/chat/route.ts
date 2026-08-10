@@ -64,7 +64,8 @@ export async function POST(req: Request) {
 
   const websiteText = await readWebsiteText();
 
-  const supabase = await createClient();
+  let supabase: any = null;
+  try { supabase = await createClient(); } catch {}
 
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
@@ -76,10 +77,20 @@ export async function POST(req: Request) {
 
   console.log('[Touhemi] API key present:', !!apiKey, '| model: openai/gpt-oss-20b:free');
 
-  const { data: kbRows, error: kbError } = await supabase
-    .from("knowledge")
-    .select("title, content")
-    .order("sort_order", { ascending: true });
+  let kbRows: any = null;
+  let kbError: any = null;
+  if (supabase) {
+    try {
+      const result = await supabase
+        .from("knowledge")
+        .select("title, content")
+        .order("sort_order", { ascending: true });
+      kbRows = result.data;
+      kbError = result.error;
+    } catch (e) {
+      kbError = e;
+    }
+  }
 
   if (kbError) {
     console.error("[Touhemi] Failed to load knowledge base from Supabase — run knowledge.sql in the Supabase SQL editor:", kbError);
@@ -193,7 +204,9 @@ export async function POST(req: Request) {
         controller.enqueue(encoder.encode(botReply));
       }
 
-      await supabase.from("messages").insert({ user_message, bot_reply: botReply });
+      if (supabase) {
+        try { await supabase.from("messages").insert({ user_message, bot_reply: botReply }); } catch {}
+      }
 
       const updatedHistory = [
         ...history,
