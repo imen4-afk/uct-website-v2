@@ -60,9 +60,26 @@ async function readWebsiteText() {
 }
 
 export async function POST(req: Request) {
-  const { user_message, history = [] } = await req.json();
+  console.log('[Touhemi] Function started');
 
-  const websiteText = await readWebsiteText();
+  let user_message = '';
+  let history: any[] = [];
+
+  try {
+    const body = await req.json();
+    user_message = body.user_message ?? '';
+    history = body.history ?? [];
+    console.log('[Touhemi] Body parsed, message:', user_message.slice(0, 50));
+  } catch (e) {
+    console.error('[Touhemi] Failed to parse body:', e);
+    return NextResponse.json({ bot_reply: 'Bad request.' }, { status: 400 });
+  }
+
+  console.log('[Touhemi] API key present:', !!process.env.OPENROUTER_API_KEY);
+
+  console.log('[Touhemi] Reading website...');
+  const websiteText = await readWebsiteText().catch(() => null);
+  console.log('[Touhemi] Website read done, got text:', !!websiteText);
 
   let supabase: any = null;
   try { supabase = await createClient(); } catch {}
