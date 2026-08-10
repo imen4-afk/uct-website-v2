@@ -74,6 +74,8 @@ export async function POST(req: Request) {
     );
   }
 
+  console.log('[Touhemi] API key present:', !!apiKey, '| model: openai/gpt-oss-20b:free');
+
   const { data: kbRows, error: kbError } = await supabase
     .from("knowledge")
     .select("title, content")
@@ -129,6 +131,7 @@ export async function POST(req: Request) {
         : "[Touhemi] OpenRouter error:",
       err
     );
+    console.error('[Touhemi] Status:', openrouterRes.status, '| Body:', err);
 
     const bot_reply = isQuotaExhausted
       ? "Touhemi is over capacity right now — please try again in a bit, or email ieee.cs.isima@gmail.com."
