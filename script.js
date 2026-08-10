@@ -534,225 +534,69 @@ document.addEventListener('DOMContentLoaded', function() {
       return row;
     }
 
-    /*
-     * getAssistantReply() is a placeholder brain for Touhemi. It answers
-     * from a knowledge base mirroring this site's own content, entirely
-     * client-side, WITHOUT calling any external API from the browser.
-     *
-     * Do NOT put a real API key in this file (or anywhere under src/): this
-     * is a static site with no server, so anything here ships to every
-     * visitor's browser and is trivially readable via view-source, and it
-     * would also sit in the public git history forever once committed.
-     *
-     * To wire up a real AI backend later: stand up a small serverless
-     * function (Cloudflare Worker / Vercel / Netlify function, etc.) that
-     * holds the API key (and, if you want live web lookups, a search API
-     * key) server-side. Have this function fetch() that endpoint with the
-     * user's message plus the SYSTEM_ROLE prompt below, and return its
-     * reply here instead of matching against KNOWLEDGE. A real model can
-     * absolutely fold search results into a natural answer without
-     * narrating "I searched for X" — that's just normal prompt design, not
-     * something this mock can fake, since it has no search capability at
-     * all client-side (no backend, and browsers can't cross-origin-fetch
-     * arbitrary sites anyway).
-     */
-    var SYSTEM_ROLE =
-      "You are Touhemi, the official assistant for UCT 2.0 (Unmasking Cyber Threats), " +
-      "a cybersecurity congress organized by the IEEE Computer Science Chapter at ISIMA " +
-      "(Mahdia, Tunisia). You only discuss: this event (program, CTF, training, venue, " +
-      "speakers, partners, ambassadors, registration), the organizing team (IEEE CS Chapter " +
-      "ISIMA), and Tunisia's IEEE / cybersecurity scene. Politely decline anything else and " +
-      "redirect back to those topics.";
+    var HISTORY_SENTINEL = '###UCT_HISTORY###';
+    var touhemiHistory = [];
 
-    var KNOWLEDGE = [
-      {
-        test: /\b(hi|hello|hey|salut|yo)\b/,
-        reply: "Hey! I'm Touhemi 🐧 — ask me anything about UCT 2.0: the program, the CTF, workshops, the venue, or how to get involved."
-      },
-      {
-        test: /who am i|my name/,
-        reply: "Ha, that one's on you — I only keep track of UCT 2.0! Speaking of which, want to know about the program, the CTF, or how to get involved?"
-      },
-      {
-        test: /who (are|r) you|what are you|your (role|name|job)|about (you|yourself)/,
-        reply: SYSTEM_ROLE.replace('You are', "I'm") + " Think of me as your guide to the event."
-      },
-      {
-        test: /what is uct|what('?s| is) (this|the) event|tell me about uct|uct 2\.?0/,
-        topic: 'about',
-        reply: "UCT — Unmasking Cyber Threats — is a national cybersecurity congress organized by the IEEE Computer Science Chapter at ISIMA. Now in its 2nd edition, it runs 26–27 September 2026 in Mahdia, Tunisia: two days of technical talks, an overnight CTF, a Technical Challenge, and a round table, built for students and industry experts to learn and network."
-      },
-      {
-        test: /\b(ieee|isima)\b.*(who|what|organiz|behind|chapter)|who organi[sz]es|organiz(er|ing team)|committee|mnadhmin|organisateurs/,
-        topic: 'organizer',
-        reply: "UCT 2.0 is organized by the IEEE Computer Science Chapter at ISIMA (Institut Supérieur d'Informatique de Mahdia). It's a student-run branch of IEEE Computer Society, active in Tunisia's cybersecurity and tech community."
-      },
-      {
-        test: /\b(when|date)\b/,
-        topic: 'about',
-        reply: "UCT 2.0 runs 26–27 September 2026 in Mahdia, Tunisia. The countdown at the top of the page is ticking down to opening day."
-      },
-      {
-        test: /timeline|dates|key dates|schedule overview/,
-        topic: 'about',
-        reply: "Key dates: Ambassador applications open until July 13 2026. Training workshops run July–September 2026. Congress: 26–27 September 2026."
-      },
-      {
-        test: /venue|hotel|mouradi|location|where|wein|mahdia|address/,
-        topic: 'venue',
-        reply: "UCT 2.0 takes place at El Mouradi Mahdia — a hotel in Mahdia, a coastal city on Tunisia's central-eastern coast known for its historic medina. Exact venue details will be shared with registered participants; check the Venue section for the map."
-      },
-      {
-        test: /day ?1|first day/,
-        topic: 'program',
-        reply: "Saturday 26 September: Welcome & badge pickup (12:00) → Opening ceremony (13:30) → Keynote conference (15:00) → Coffee break (16:30) → Technical workshops (17:00) → Dinner (19:00) → Evening event (20:00) → Overnight CTF begins (22:00, 12 hours)."
-      },
-      {
-        test: /day ?2|second day|closing/,
-        topic: 'program',
-        reply: "Sunday 27 September: Breakfast (08:00) → End of CTF (10:00) → Pitching and stands of the Technical Challenge plus startup and SME exhibition space (10:30) → Lunch (12:30) → Round table (13:15) → Closing ceremony (14:45)."
-      },
-      {
-        test: /program|schedule|agenda/,
-        topic: 'program',
-        reply: "UCT 2.0 runs two packed days of keynote talks, technical workshops, an overnight CTF, an evening event, Technical Challenge pitching, and a closing ceremony. See the Program section for the full Saturday / Sunday breakdown."
-      },
-      {
-        test: /web exploitation|\bsqli\b|\bxss\b/,
-        topic: 'ctf',
-        reply: "Web Exploitation is one of the CTF categories: SQLi, XSS, SSRF, auth bypasses and more — jeopardy-style flags scored live all night. Beginner-friendly."
-      },
-      {
-        test: /reverse engineering|\brev\b|disassembl/,
-        topic: 'ctf',
-        reply: "Reverse Engineering is a CTF category where you disassemble binaries and crack obfuscated code to find hidden flags. Bring a disassembler!"
-      },
-      {
-        test: /crypto(graphy)?|cipher/,
-        topic: 'ctf',
-        reply: "Cryptography is a CTF category — from classic ciphers to broken RSA. Math is your lockpick."
-      },
-      {
-        test: /osint|open.source intelligence/,
-        topic: 'ctf',
-        reply: "OSINT is a CTF category about open-source intelligence gathering — public records, metadata, social traces. Nothing stays hidden."
-      },
-      {
-        test: /forensics|memory dump|packet capture/,
-        topic: 'ctf',
-        reply: "Forensics is a CTF category — memory dumps, packet captures, steganography, and file carving."
-      },
-      {
-        test: /technical challenge|\bt\.?c\b|pitch/,
-        topic: 'ctf',
-        reply: "The Technical Challenge is a separate track: teams solve a real-world scenario, then pitch and defend it live in front of a jury on Day 2."
-      },
-      {
-        test: /ctf|capture the flag|\bflag\b/,
-        topic: 'ctf',
-        reply: "The CTF is an overnight Capture The Flag running in parallel with the Technical Challenge, across Web Exploitation, Reverse Engineering, Cryptography, OSINT, and Forensics — skewed beginner-friendly, and the pre-event workshops help you prepare. Hover a category in the CTF section to see its format."
-      },
-      {
-        test: /training|workshop/,
-        topic: 'training',
-        reply: "Ahead of UCT, there's a free 14-part workshop series on Cybersecurity Basics & CTF Methodology running July–September, open to all Tunisian university students — from \"Introduction to Cybersecurity\" (July 25) to \"Scripting for CTFs\" (September 8). See the Training section for the full list and dates."
-      },
-      {
-        test: /speaker|guest/,
-        topic: 'speakers',
-        reply: "The speaker and guest lineup for UCT 2.0 is being finalized — check the Speakers section for updates as they're announced."
-      },
-      {
-        test: /partner|sponsor/,
-        topic: 'partners',
-        reply: "The partner lineup is being finalized too. If you or your company want to support UCT 2.0, reach out at ieee.cs.isima@gmail.com."
-      },
-      {
-        test: /ambassador/,
-        topic: 'ambassador',
-        reply: "UCT ambassadors represent the congress at their university and help drive registrations. Applications are open now, until July 13 — there's a link in the Ambassadors section (\"Become an ambassador before July 13\")."
-      },
-      {
-        test: /regist(er|ration)|sign ?up|ticket/,
-        topic: 'registration',
-        reply: "Registration isn't open yet — follow @ieee.uct and this site will announce it the moment it goes live."
-      },
-      {
-        test: /how (do|can|to) i (apply|join|participate|get involved|enroll)|how to apply|how to join/,
-        reply: function() {
-          if (lastTopic === 'ambassador') {
-            return "Ambassador applications are open now, until July 13 — there's a form linked in the Ambassadors section (\"Become an ambassador before July 13\"). Don't wait too long!";
-          }
-          if (lastTopic === 'training') {
-            return "The workshops are free and open to all Tunisian university students — no application needed, just show up. Follow @ieee.uct so you don't miss a date.";
-          }
-          if (lastTopic === 'ctf' || lastTopic === 'registration') {
-            return "General registration for UCT 2.0 (CTF included) isn't open yet — follow @ieee.uct and this site will announce it here first.";
-          }
-          return "Depends what you're after: general event registration isn't open yet (follow @ieee.uct for the announcement), but ambassador applications ARE open now until July 13. Which one did you mean?";
-        }
-      },
-      {
-        test: /team|solo|alone/,
-        topic: 'ctf',
-        reply: "Teams of 2–4 are recommended for the CTF, but you can register solo and the organizers will help you find teammates."
-      },
-      {
-        test: /beginner|difficulty|skill level|experience/,
-        topic: 'ctf',
-        reply: "Yes, UCT's CTF is designed to be beginner-friendly, with difficulty ramping up per category — plus the pre-event training program helps you get ready."
-      },
-      {
-        test: /contact|email|reach|social|instagram|facebook|linkedin/,
-        topic: 'contact',
-        reply: "You can reach the organizing team at ieee.cs.isima@gmail.com or @ieee.uct on Instagram — see the Contact section for everything."
-      },
-      {
-        test: /thank/,
-        reply: "Anytime! Good luck, and see you at UCT 2.0 in Mahdia. 🐧"
-      }
-    ];
-
-    // A light guard so replies stay scoped to the event / IEEE / Tunisia / organizers,
-    // as the assistant is meant to (rather than answering arbitrary questions).
-    var OFF_TOPIC_HINTS = /\b(weather|joke|recipe|homework|write (me )?(a |some )?code|movie recommend|football|stock|crypto ?currency price|bitcoin price|translate|poem|song lyrics)\b/;
-
-    var FALLBACK_REPLIES = [
-      "I don't have an answer for that one, but I know UCT inside out — try the program, the CTF, workshops, the venue, or how to get involved.",
-      "Not sure about that — happy to help with anything UCT-related though: schedule, CTF categories, training, ambassadors, or registration.",
-      "That one's outside what I've got. Ask me about the event itself — program, CTF, venue, speakers, partners, or the organizing team."
-    ];
-    var lastTopic = null;
-    var fallbackIndex = 0;
-
-    function getAssistantReply(message) {
-      var q = message.toLowerCase();
-      for (var i = 0; i < KNOWLEDGE.length; i++) {
-        if (KNOWLEDGE[i].test.test(q)) {
-          if (KNOWLEDGE[i].topic) lastTopic = KNOWLEDGE[i].topic;
-          var reply = KNOWLEDGE[i].reply;
-          return typeof reply === 'function' ? reply() : reply;
-        }
-      }
-      if (OFF_TOPIC_HINTS.test(q)) {
-        return "That's outside what I can help with — I only talk about UCT 2.0, IEEE CS ISIMA, and Tunisia's cybersecurity scene. Ask me about the program, the CTF, workshops, the venue, or the organizing team!";
-      }
-      var msg = FALLBACK_REPLIES[fallbackIndex % FALLBACK_REPLIES.length];
-      fallbackIndex++;
-      return msg;
-    }
-
-    chatForm.addEventListener('submit', function(e) {
+    chatForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       const text = chatInput.value.trim();
       if (!text) return;
+
       addMessage(text, 'user');
       chatInput.value = '';
+      chatInput.disabled = true;
+
       const typingRow = showTyping();
-      setTimeout(function() {
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_message: text,
+            history: touhemiHistory
+          })
+        });
+
+        if (!res.ok || !res.body) throw new Error('Request failed');
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let raw = '';
+
         typingRow.remove();
-        addMessage(getAssistantReply(text), 'bot');
-      }, 550 + Math.random() * 500);
+        const botRow = addMessage('', 'bot');
+        const botP = botRow.querySelector('p');
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          raw += decoder.decode(value, { stream: true });
+
+          // The updated history rides along at the end of the body behind a
+          // sentinel (it can't be a response header — it isn't known until
+          // the stream finishes, and headers ship before the body). Strip it
+          // out of what gets displayed.
+          const sentinelIndex = raw.indexOf(HISTORY_SENTINEL);
+          botP.textContent = sentinelIndex === -1 ? raw : raw.slice(0, sentinelIndex);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        const sentinelIndex = raw.indexOf(HISTORY_SENTINEL);
+        if (sentinelIndex !== -1) {
+          try {
+            touhemiHistory = JSON.parse(raw.slice(sentinelIndex + HISTORY_SENTINEL.length));
+          } catch (parseErr) {}
+        }
+
+      } catch (err) {
+        typingRow.remove();
+        addMessage('Something went wrong — try again or email ieee.cs.isima@gmail.com.', 'bot');
+        console.error('[Touhemi]', err);
+      } finally {
+        chatInput.disabled = false;
+        chatInput.focus();
+      }
     });
   }
 
