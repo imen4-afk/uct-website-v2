@@ -5,6 +5,9 @@ import { createClient } from "@/utils/supabase/client";
 type Message = { user: string; text: string };
 type HistoryTurn = { role: string; content: string };
 
+const HISTORY_SENTINEL = "###UCT_HISTORY###";
+const TYPING_PLACEHOLDER = "Bot is typing...";
+
 export default function ChatBox() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [history, setHistory] = useState<HistoryTurn[]>([]);
@@ -45,7 +48,11 @@ export default function ChatBox() {
 
     setSending(true);
     setInput("");
-    setMessages((prev) => [...prev, { user: "You", text }] );
+    setMessages((prev) => [
+      ...prev,
+      { user: "You", text },
+      { user: "Bot", text: TYPING_PLACEHOLDER },
+    ]);
 
     try {
       const res = await fetch("/api/chat", {
@@ -54,16 +61,40 @@ export default function ChatBox() {
         body: JSON.stringify({ user_message: text, history }),
       });
 
-      const data = await res.json();
-      const reply = data.bot_reply ?? "No response.";
+      if (!res.ok || !res.body) throw new Error("Request failed");
 
-      setMessages((prev) => [...prev, { user: "Bot", text: reply }]);
-      if (data.history) setHistory(data.history);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let raw = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        raw += decoder.decode(value, { stream: true });
+
+        const sentinelIndex = raw.indexOf(HISTORY_SENTINEL);
+        const displayText = sentinelIndex === -1 ? raw : raw.slice(0, sentinelIndex);
+
+        setMessages((prev) => {
+          const next = [...prev];
+          next[next.length - 1] = { user: "Bot", text: displayText || TYPING_PLACEHOLDER };
+          return next;
+        });
+      }
+
+      const sentinelIndex = raw.indexOf(HISTORY_SENTINEL);
+      if (sentinelIndex !== -1) {
+        const historyJson = raw.slice(sentinelIndex + HISTORY_SENTINEL.length);
+        try {
+          setHistory(JSON.parse(historyJson));
+        } catch {}
+      }
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { user: "Bot", text: "Something went wrong — try again." },
-      ]);
+      setMessages((prev) => {
+        const next = [...prev];
+        next[next.length - 1] = { user: "Bot", text: "Something went wrong — try again." };
+        return next;
+      });
     } finally {
       setSending(false);
     }

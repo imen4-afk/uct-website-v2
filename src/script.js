@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
         reply: "UCT — Unmasking Cyber Threats — is a national cybersecurity congress organized by the IEEE Computer Science Chapter at ISIMA. Now in its 2nd edition, it runs 26–27 September 2026 in Mahdia, Tunisia: two days of technical talks, an overnight CTF, a Technical Challenge, and a round table, built for students and industry experts to learn and network."
       },
       {
-        test: /\b(ieee|isima)\b.*(who|what|organiz|behind|chapter)|who organi[sz]es|organiz(er|ing team)/,
+        test: /\b(ieee|isima)\b.*(who|what|organiz|behind|chapter)|who organi[sz]es|organiz(er|ing team)|committee|mnadhmin|organisateurs/,
         topic: 'organizer',
         reply: "UCT 2.0 is organized by the IEEE Computer Science Chapter at ISIMA (Institut Supérieur d'Informatique de Mahdia). It's a student-run branch of IEEE Computer Society, active in Tunisia's cybersecurity and tech community."
       },
@@ -593,9 +593,14 @@ document.addEventListener('DOMContentLoaded', function() {
         reply: "UCT 2.0 runs 26–27 September 2026 in Mahdia, Tunisia. The countdown at the top of the page is ticking down to opening day."
       },
       {
-        test: /where|venue|mahdia|location|address/,
+        test: /timeline|dates|key dates|schedule overview/,
+        topic: 'about',
+        reply: "Key dates: Ambassador applications open until July 13 2026. Training workshops run July–September 2026. Congress: 26–27 September 2026."
+      },
+      {
+        test: /venue|hotel|mouradi|location|where|wein|mahdia|address/,
         topic: 'venue',
-        reply: "UCT 2.0 takes place in Mahdia — a coastal city on Tunisia's central-eastern coast known for its historic medina. The exact venue will be shared with registered participants; check the Venue section for the map."
+        reply: "UCT 2.0 takes place at El Mouradi Mahdia — a hotel in Mahdia, a coastal city on Tunisia's central-eastern coast known for its historic medina. Exact venue details will be shared with registered participants; check the Venue section for the map."
       },
       {
         test: /day ?1|first day/,

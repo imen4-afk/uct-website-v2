@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
+import { readFile } from "fs/promises";
+import path from "path";
 import { createClient } from "../../../utils/supabase/server";
 
-const SYSTEM_PROMPT = `
+const HISTORY_SENTINEL = "###UCT_HISTORY###";
+
+const PERSONA_PROMPT = `
 You are Touhemi 🐧, the friendly official assistant for UCT 2.0 — Unmasking Cyber Threats, a national cybersecurity congress organized by the IEEE Computer Science Chapter at ISIMA (Institut Supérieur d'Informatique de Mahdia), Tunisia.
 
 == YOUR JOB ==
-Answer any question about UCT 2.0. Be helpful, warm, and concise (2–4 sentences unless detail is needed). Reply in the same language the user writes in — French, English, or Tunisian Arabic. Match their register.
+Answer any question about UCT 2.0 using ONLY the knowledge base below. Be helpful and warm. Answer as fully as needed to be genuinely helpful. Never truncate a useful answer artificially. Reply in the same language the user writes in — French, English, or Tunisian Arabic. Match their register.
 
 == CRITICAL: LANGUAGE & TYPO TOLERANCE ==
 Users will make typos, use alternate spellings, Tunisian Arabic, or French. ALWAYS infer intent and answer regardless of spelling. Never refuse due to a spelling variation. Examples:
@@ -20,83 +24,46 @@ Users will make typos, use alternate spellings, Tunisian Arabic, or French. ALWA
 
 == CONFIDENCE RULE ==
 If you are 60% or more confident about what the user is asking, answer it. Only fall back if the topic is genuinely unrelated to UCT or IEEE CS ISIMA.
+`.trim();
 
-== UCT 2.0 KNOWLEDGE BASE ==
+const BEHAVIOR_RULES = `
+== BEHAVIOR RULES ==
 
---- EVENT ---
-- Full name: Unmasking Cyber Threats — 2nd Edition (UCT 2.0)
-- Type: National Cybersecurity Congress
-- Dates: 26–27 September 2026
-- Location: Mahdia, Tunisia (exact venue shared with registered participants)
-- Organizer: IEEE Computer Science Chapter at ISIMA Student Branch
-- Tracks: Overnight CTF + Technical Challenge (in parallel)
-- Round table with prominent cybersecurity experts
-- Focus: technical depth, competitions, networking
-
---- PROGRAM ---
-Day 1 (Sep 26):
-  12:00 – Check In
-  13:30 – Opening Ceremony
-  15:00 – Conference / Talks
-  17:00 – Workshops
-  19:00 – Dinner
-  20:00 – Party
-  22:00 – Overnight CTF starts + Karaoke
-  23:00 – Movie night
-
-Day 2 (Sep 27):
-  09:00 – End of CTF & Breakfast
-  09:30 – Tour of Mahdia OR Murder Mystery Game (participant choice)
-  12:00 – Lunch
-  13:00 – Technical Challenge pitching (jury evaluation)
-  15:00 – Break
-  15:30 – Closing Ceremony & Awards
-
---- CTF ---
-- Overnight jeopardy-style CTF from Day 1 night through Day 2 morning
-- Categories: Web Exploitation (SQLi, XSS, SSRF), Reverse Engineering, Cryptography, OSINT, Forensics
-- Beginner-friendly with progressive difficulty
-- Teams of 2–4 recommended; solo registration allowed (organizers help with matching)
-
---- TECHNICAL CHALLENGE ---
-- Separate track from CTF
-- Teams solve a real-world cybersecurity scenario
-- Pitch and defend to a jury on Day 2 at 13:00
-
---- PRE-EVENT TRAINING ---
-- Free 14-session online workshop series on Cybersecurity Basics & CTF Methodology
-- Runs July–September 2026, open to all Tunisian university students
-- No application required
-- Topics: Intro to Cybersecurity, Networking, Linux, Web Security, Crypto, OSINT, Forensics, Scripting for CTFs, practice CTF
-
---- AMBASSADORS ---
-- Represent UCT at their university, promote and drive registrations
-- Applications open until July 13 — form in the Ambassadors section of the website
-
---- REGISTRATION ---
-- General registration not yet open
-- Ambassador applications open until July 13
-- Follow @ieee.uct on Instagram for the announcement
-
---- SPEAKERS & PARTNERS ---
-- Lineup being finalized — prominent figures from Tunisia's cybersecurity scene
-- Sponsorship inquiries: ieee.cs.isima@gmail.com
-
---- CONTACT ---
-- Email: ieee.cs.isima@gmail.com
-- Instagram: @ieee.uct
-- Organized by: IEEE CS Chapter ISIMA Student Branch, Mahdia, Tunisia
-
-== OUT OF SCOPE ==
+--- OUT OF SCOPE ---
 Politely decline and redirect if the question is completely unrelated to UCT, IEEE CS ISIMA, or Tunisia's cybersecurity scene.
 
-== FALLBACK ==
-If genuinely unsure: "I don't have that detail yet — check @ieee.uct or email ieee.cs.isima@gmail.com."
-Never invent facts.
+--- FALLBACK ---
+If genuinely unsure, or neither the knowledge base nor the live website content covers it: "I don't have that detail yet — check @ieee.uct or email ieee.cs.isima@gmail.com."
+Never invent facts that aren't in the knowledge base or website content.
 `.trim();
+
+async function readWebsiteText() {
+  const candidates = [
+    path.join(process.cwd(), "public", "index.html"),
+    path.join(process.cwd(), "docs", "index.html"),
+  ];
+
+  for (const filePath of candidates) {
+    try {
+      const html = await readFile(filePath, "utf-8");
+      return html
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 6000);
+    } catch {
+      // try the next candidate
+    }
+  }
+
+  return null;
+}
 
 export async function POST(req: Request) {
   const { user_message, history = [] } = await req.json();
+
+  const websiteText = await readWebsiteText();
+
   const supabase = await createClient();
 
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -106,6 +73,26 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+
+  const { data: kbRows, error: kbError } = await supabase
+    .from("knowledge")
+    .select("title, content")
+    .order("sort_order", { ascending: true });
+
+  if (kbError) {
+    console.error("[Touhemi] Failed to load knowledge base from Supabase — run knowledge.sql in the Supabase SQL editor:", kbError);
+  }
+
+  const knowledgeText =
+    kbRows && kbRows.length
+      ? kbRows.map((row) => `--- ${row.title} ---\n${row.content}`).join("\n\n")
+      : "(knowledge base unavailable — only use the FALLBACK contact info)";
+
+  const liveContentSection = websiteText
+    ? `\n\n== LIVE WEBSITE CONTENT ==\n\n${websiteText}`
+    : "";
+
+  const SYSTEM_PROMPT = `${PERSONA_PROMPT}\n\n== UCT 2.0 KNOWLEDGE BASE ==\n\n${knowledgeText}${liveContentSection}\n\n${BEHAVIOR_RULES}`;
 
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
@@ -125,12 +112,14 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: "openai/gpt-oss-20b:free",
+        max_tokens: 800,
         messages,
+        stream: true,
       }),
     }
   );
 
-  if (!openrouterRes.ok) {
+  if (!openrouterRes.ok || !openrouterRes.body) {
     const err = await openrouterRes.json().catch(() => ({}));
     const isQuotaExhausted = openrouterRes.status === 429 || openrouterRes.status === 402;
 
@@ -151,19 +140,74 @@ export async function POST(req: Request) {
     );
   }
 
-  const openrouterData = await openrouterRes.json();
-  const bot_reply =
-    openrouterData?.choices?.[0]?.message?.content?.trim() ??
-    "I didn't get a response — try again or email ieee.cs.isima@gmail.com.";
+  const upstreamReader = openrouterRes.body.getReader();
+  const encoder = new TextEncoder();
+  const decoder = new TextDecoder();
 
-  await supabase.from("messages").insert({ user_message, bot_reply });
+  const stream = new ReadableStream({
+    async start(controller) {
+      let botReply = "";
+      let buffer = "";
+      let finished = false;
 
-  return NextResponse.json({
-    bot_reply,
-    history: [
-      ...history,
-      { role: "user", content: user_message },
-      { role: "assistant", content: bot_reply },
-    ],
+      try {
+        while (!finished) {
+          const { done, value } = await upstreamReader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith("data:")) continue;
+            const data = trimmed.slice(5).trim();
+
+            if (data === "[DONE]") {
+              finished = true;
+              break;
+            }
+
+            try {
+              const parsed = JSON.parse(data);
+              const token = parsed?.choices?.[0]?.delta?.content;
+              if (token) {
+                botReply += token;
+                controller.enqueue(encoder.encode(token));
+              }
+            } catch {
+              // ignore malformed/keep-alive SSE lines
+            }
+          }
+        }
+      } catch (streamErr) {
+        console.error("[Touhemi] Stream read error:", streamErr);
+      }
+
+      if (!botReply) {
+        botReply = "I didn't get a response — try again or email ieee.cs.isima@gmail.com.";
+        controller.enqueue(encoder.encode(botReply));
+      }
+
+      await supabase.from("messages").insert({ user_message, bot_reply: botReply });
+
+      const updatedHistory = [
+        ...history,
+        { role: "user", content: user_message },
+        { role: "assistant", content: botReply },
+      ];
+
+      // The updated history (including this reply) only exists once the
+      // stream is done — but HTTP headers ship before the body, so they
+      // can't carry data that isn't known yet. It's appended to the body
+      // instead, behind a sentinel the client strips before rendering.
+      controller.enqueue(encoder.encode(HISTORY_SENTINEL + JSON.stringify(updatedHistory)));
+      controller.close();
+    },
+  });
+
+  return new NextResponse(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }
