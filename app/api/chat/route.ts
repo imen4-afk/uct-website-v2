@@ -2,7 +2,6 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from "next/server";
 import path from "path";
-import { createClient } from "../../../utils/supabase/server";
 
 const HISTORY_SENTINEL = "###UCT_HISTORY###";
 
@@ -56,9 +55,6 @@ export async function POST(req: Request) {
 
   console.log('[Touhemi] API key present:', !!process.env.OPENROUTER_API_KEY);
 
-  let supabase: any = null;
-  try { supabase = await createClient(); } catch {}
-
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -69,29 +65,7 @@ export async function POST(req: Request) {
 
   console.log('[Touhemi] API key present:', !!apiKey, '| model: openai/gpt-oss-20b:free');
 
-  let kbRows: any = null;
-  let kbError: any = null;
-  if (supabase) {
-    try {
-      const result = await supabase
-        .from("knowledge")
-        .select("title, content")
-        .order("sort_order", { ascending: true });
-      kbRows = result.data;
-      kbError = result.error;
-    } catch (e) {
-      kbError = e;
-    }
-  }
-
-  if (kbError) {
-    console.error("[Touhemi] Failed to load knowledge base from Supabase — run knowledge.sql in the Supabase SQL editor:", kbError);
-  }
-
-  const knowledgeText =
-    kbRows && kbRows.length
-      ? kbRows.map((row) => `--- ${row.title} ---\n${row.content}`).join("\n\n")
-      : "(knowledge base unavailable — only use the FALLBACK contact info)";
+  const knowledgeText = "(knowledge base unavailable — only use the FALLBACK contact info)";
 
   const SYSTEM_PROMPT = `${PERSONA_PROMPT}\n\n== UCT 2.0 KNOWLEDGE BASE ==\n\n${knowledgeText}\n\n${BEHAVIOR_RULES}`;
 
@@ -190,10 +164,6 @@ export async function POST(req: Request) {
       if (!botReply) {
         botReply = "I didn't get a response — try again or email ieee.cs.isima@gmail.com.";
         controller.enqueue(encoder.encode(botReply));
-      }
-
-      if (supabase) {
-        try { await supabase.from("messages").insert({ user_message, bot_reply: botReply }); } catch {}
       }
 
       const updatedHistory = [
