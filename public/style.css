@@ -1172,6 +1172,7 @@ h2.section-title.is-visible { background-size: 100% 100%; }
   right: 22px; top: 50%; transform: translateY(-50%);
   z-index: 150;
   display: flex; flex-direction: column; align-items: center;
+  height: fit-content;
   gap: 14px;
   padding: 14px 7px;
   border-radius: 999px;
@@ -1182,6 +1183,7 @@ h2.section-title.is-visible { background-size: 100% 100%; }
 }
 .side-nav button {
   width: 22px; height: 22px;
+  flex-shrink: 0;
   border: none; background: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   position: relative;

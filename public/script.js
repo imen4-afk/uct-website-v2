@@ -455,9 +455,18 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
         if (best) {
-          sideButtons.forEach(function(btn) {
-            btn.classList.toggle('active', btn.getAttribute('data-target') === best.target.id);
+          const hasMatch = Array.prototype.some.call(sideButtons, function(btn) {
+            return btn.getAttribute('data-target') === best.target.id;
           });
+          // Some tracked sections (e.g. partners, ambassadors, networking)
+          // have no side-nav dot. Only update highlighting when the
+          // in-view section actually has one, so the dot doesn't go dark
+          // while scrolling through an unlisted section.
+          if (hasMatch) {
+            sideButtons.forEach(function(btn) {
+              btn.classList.toggle('active', btn.getAttribute('data-target') === best.target.id);
+            });
+          }
         }
       }, { rootMargin: '-40% 0px -50% 0px', threshold: [0, .1, .25, .5, .75, 1] });
       allTracked.forEach(function(s) { sideSpy.observe(s); });
